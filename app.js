@@ -84,10 +84,14 @@ const jobText = document.getElementById("jobText");
 const analyzeButton = document.getElementById("analyzeButton");
 const clearButton = document.getElementById("clearButton");
 const loadSampleButton = document.getElementById("loadSampleButton");
+const copyButton = document.getElementById("copyButton");
 const results = document.getElementById("results");
 const summary = document.getElementById("summary");
 const matchCount = document.getElementById("matchCount");
 const criteriaGrid = document.getElementById("criteriaGrid");
+
+let lastFindings = [];
+let lastText = "";
 
 function splitSentences(text) {
   return text
@@ -134,6 +138,9 @@ function renderCriteria() {
 }
 
 function renderResults(findings, text) {
+  lastFindings = findings;
+  lastText = text;
+
   if (!text.trim()) {
     results.innerHTML = "";
     summary.innerHTML = "Paste a JD and choose <strong>Analyse text</strong> to see the strongest matches.";
@@ -173,6 +180,41 @@ function runAnalysis() {
   renderResults(analyse(jobText.value), jobText.value);
 }
 
+function buildReport(findings, text) {
+  const lines = [];
+  lines.push("Learning Designer JD Matcher report");
+  lines.push("");
+  lines.push(`Source length: ${text.trim().split(/\s+/).filter(Boolean).length} words`);
+  lines.push(`Matches found: ${findings.length}`);
+  lines.push("");
+
+  if (findings.length === 0) {
+    lines.push("No strong matches were found.");
+    return lines.join("\n");
+  }
+
+  for (const finding of findings) {
+    lines.push(`- ${finding.label}: ${finding.matches[0]}`);
+  }
+
+  return lines.join("\n");
+}
+
+async function copyReport() {
+  const report = buildReport(lastFindings, lastText);
+
+  if (!navigator.clipboard) {
+    window.alert("Your browser does not support clipboard copy here. You can still select and copy the report manually.");
+    return;
+  }
+
+  await navigator.clipboard.writeText(report);
+  copyButton.textContent = "Copied!";
+  window.setTimeout(() => {
+    copyButton.textContent = "Copy report";
+  }, 1500);
+}
+
 analyzeButton.addEventListener("click", runAnalysis);
 clearButton.addEventListener("click", () => {
   jobText.value = "";
@@ -182,6 +224,7 @@ loadSampleButton.addEventListener("click", () => {
   jobText.value = sampleText;
   runAnalysis();
 });
+copyButton.addEventListener("click", copyReport);
 
 jobText.addEventListener("keydown", (event) => {
   if (event.metaKey || event.ctrlKey) {
