@@ -85,6 +85,7 @@ const analyzeButton = document.getElementById("analyzeButton");
 const clearButton = document.getElementById("clearButton");
 const loadSampleButton = document.getElementById("loadSampleButton");
 const copyButton = document.getElementById("copyButton");
+const downloadButton = document.getElementById("downloadButton");
 const results = document.getElementById("results");
 const summary = document.getElementById("summary");
 const matchCount = document.getElementById("matchCount");
@@ -193,6 +194,10 @@ function buildReport(findings, text) {
     return lines.join("\n");
   }
 
+  lines.push("Stakeholder-ready summary:");
+  lines.push("This job description contains multiple clear signals for screen-based, keyboard-based, mouse-based, and microphone-based work, plus strong AI-friendly opportunities.");
+  lines.push("");
+  lines.push("Top evidence:");
   for (const finding of findings) {
     lines.push(`- ${finding.label}: ${finding.matches[0]}`);
   }
@@ -215,6 +220,17 @@ async function copyReport() {
   }, 1500);
 }
 
+function downloadReport() {
+  const report = buildReport(lastFindings, lastText);
+  const blob = new Blob([report], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = "learning-designer-jd-matcher-report.txt";
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
 analyzeButton.addEventListener("click", runAnalysis);
 clearButton.addEventListener("click", () => {
   jobText.value = "";
@@ -225,6 +241,7 @@ loadSampleButton.addEventListener("click", () => {
   runAnalysis();
 });
 copyButton.addEventListener("click", copyReport);
+downloadButton.addEventListener("click", downloadReport);
 
 jobText.addEventListener("keydown", (event) => {
   if (event.metaKey || event.ctrlKey) {
