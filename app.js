@@ -86,6 +86,7 @@ const clearButton = document.getElementById("clearButton");
 const loadSampleButton = document.getElementById("loadSampleButton");
 const copyButton = document.getElementById("copyButton");
 const downloadButton = document.getElementById("downloadButton");
+const reportTitleInput = document.getElementById("reportTitle");
 const results = document.getElementById("results");
 const summary = document.getElementById("summary");
 const matchCount = document.getElementById("matchCount");
@@ -183,7 +184,11 @@ function runAnalysis() {
 
 function buildReport(findings, text) {
   const lines = [];
-  lines.push("Learning Designer JD Matcher report");
+  const reportTitle = reportTitleInput.value.trim() || "Learning Designer JD Review";
+  const now = new Date();
+  lines.push(reportTitle);
+  lines.push("");
+  lines.push(`Created: ${now.toLocaleString()}`);
   lines.push("");
   lines.push(`Source length: ${text.trim().split(/\s+/).filter(Boolean).length} words`);
   lines.push(`Matches found: ${findings.length}`);
