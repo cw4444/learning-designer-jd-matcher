@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Learning Designer JD Matcher</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">Local job-description helper</p>
+        <h1>Find the bits that clearly fit the laptop rule</h1>
+        <p class="lede">
+          Paste a job description, then this app highlights the parts that
+          strongly suggest screen, keyboard, mouse, and microphone work, plus
+          AI-friendly tasks that a system can support well.
+        </p>
+      </section>
+
+      <section class="panel">
+        <div class="panel__header">
+          <h2>Job Description</h2>
+          <button id="loadSampleButton" class="button button--ghost" type="button">
+            Load sample text
+          </button>
+        </div>
+
+        <textarea
+          id="jobText"
+          class="textarea"
+          rows="16"
+          spellcheck="false"
+          placeholder="Paste a job description here..."
+        ></textarea>
+
+        <div class="actions">
+          <button id="analyzeButton" class="button" type="button">Analyse text</button>
+          <button id="clearButton" class="button button--ghost" type="button">Clear</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel__header">
+          <h2>What the app found</h2>
+          <span id="matchCount" class="badge">0 matches</span>
+        </div>
+
+        <div id="summary" class="summary">
+          Paste a JD and choose <strong>Analyse text</strong> to see the strongest matches.
+        </div>
+
+        <div id="results" class="results"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel__header">
+          <h2>Why these count</h2>
+        </div>
+        <div class="criteria-grid" id="criteriaGrid"></div>
+      </section>
+
+      <footer class="footer">
+        <a href="https://openai.com" target="_blank" rel="noreferrer">
+          Made with Codex from OpenAI
+        </a>
+      </footer>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
